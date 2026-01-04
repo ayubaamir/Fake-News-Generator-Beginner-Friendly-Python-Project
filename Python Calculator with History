@@ -1,10 +1,97 @@
-A simple Python calculator that performs basic arithmetic operations and saves calculation history in a text file.
-This project uses:
+# Simple Calculator with History
+# This program allows the user to perform basic calculations (+, -, *, /)
+# It also saves calculation history to a text file and allows viewing or clearing history.
 
-Python functions
+file_History = "file.txt"  # File to store history
 
-File handling (read/write)
+# Function to show calculation history
+def show_history():
+    try:
+        file = open(file_History, "r")
+        lines = file.readlines()
+        if len(lines) == 0:
+            print("No history found.")
+        else:
+            print("\n--- Calculation History ---")
+            for line in reversed(lines):  # Show latest first
+                print(line.strip())
+        file.close()
+    except FileNotFoundError:
+        print("No history file found.")
 
-User input handling
+# Function to clear calculation history
+def clear_history():
+    file = open(file_History, "w")  # Overwrites file to clear it
+    file.close()
+    print("History cleared!")
 
-Perfect for Python beginners to understand real-world usage of file handling.
+# Function to save each calculation to history
+def save_history(equation, result):
+    file = open(file_History, "a")  # Append mode
+    file.write(equation + " = " + str(result) + "\n")
+    file.close()
+
+# Function to perform calculation
+def calculate(user_input):
+    parts = user_input.split()
+    
+    # Check if input is valid (must be: number operator number)
+    if len(parts) != 3:
+        print("Invalid input. Use format: number operator number (e.g., 2 + 3)")
+        return
+
+    try:
+        num1 = float(parts[0])
+        op = parts[1]
+        num2 = float(parts[2])
+    except ValueError:
+        print("Invalid numbers entered.")
+        return
+
+    # Perform the operation
+    if op == "+":
+        result = num1 + num2
+    elif op == "-":
+        result = num1 - num2
+    elif op == "*":
+        result = num1 * num2
+    elif op == "/":
+        if num2 == 0:
+            print("You cannot divide by zero!")
+            return
+        result = num1 / num2
+    else:
+        print("Invalid operator! Use +, -, *, or /")
+        return
+
+    # Convert result to int if it is whole number
+    if result == int(result):
+        result = int(result)
+
+    print("Result:", result)
+
+    # Save to history
+    save_history(user_input, result)
+
+# Main program loop
+def main():
+    print("Welcome to Simple Calculator!")
+    print("Type 'history' to view past calculations.")
+    print("Type 'clear' to clear history.")
+    print("Type 'exit' to quit the calculator.\n")
+
+    while True:
+        user_input = input("Enter calculation: ").strip().lower()
+        if user_input == "exit":
+            print("Goodbye! Thanks for using the calculator. 😄")
+            break
+        elif user_input == "history":
+            show_history()
+        elif user_input == "clear":
+            clear_history()
+        else:
+            calculate(user_input)
+
+# Run the calculator
+main()
+
