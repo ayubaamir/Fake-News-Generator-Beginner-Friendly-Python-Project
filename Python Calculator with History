@@ -1,0 +1,10 @@
+A simple Python calculator that performs basic arithmetic operations and saves calculation history in a text file.
+This project uses:
+
+Python functions
+
+File handling (read/write)
+
+User input handling
+
+Perfect for Python beginners to understand real-world usage of file handling.
